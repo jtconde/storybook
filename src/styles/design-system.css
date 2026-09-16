@@ -1,0 +1,1042 @@
+/* ============================================================================
+   ABACUS SUBPAGE DESIGN SYSTEM
+   Extracted verbatim from subpage.html — the same rules the reference pages
+   render with, so Storybook and the HTML pages cannot drift apart.
+
+   Source of truth for intent: subpage-design-system.html
+   Fonts: ./fonts.css   Storybook-only chrome: ./storybook.css
+
+   NOTE: this file also carries a handful of homepage-only components that ride
+   along in subpage.html and are not part of the documented subpage system —
+   .quicklinks/.qcard, .composer, .pill, .iconbtn, .textlink, .hero, .deep,
+   .plan/.feature, .press/.award/.wordmark. They are harmless but undocumented.
+   ============================================================================ */
+
+/* ---------- typefaces ------------------------------------------------------
+   Matter (Displaay) is a licensed face with no CDN. It ships with this project
+   in ./Fonts and loads by relative url(), with local() tried first so machines
+   that already have the family installed skip the fetch. Keep the Fonts folder
+   beside this file when moving it. Italics are declared for completeness but
+   the system sets nothing in italic. IBM Plex Sans comes from Google Fonts.
+   -------------------------------------------------------------------------- */
+
+/* ============================================================
+   DESIGN SYSTEM — tokens
+   ============================================================ */
+:root{
+  color-scheme:light;
+
+  /* --- brand ------------------------------------------------ */
+  --brand:#754fe3;          /* primary purple (buttons, active) */
+  --brand-hi:#8d6eec;       /* purple used in display headings  */
+  --brand-soft:#dfd9f6;     /* active chip fill                 */
+  --brand-ink:#5b3fd1;      /* text on --brand-soft             */
+  --blue:#6399f2;           /* secondary action (dark surfaces) */
+
+  /* --- brand mark ---------------------------------------------------
+     The four colours in the logo bars, sampled from the asset. These are
+     graphic colours for brand expression, NOT interchangeable with the
+     action colours above — none of them clears 4.5:1 as text on white. */
+  --logo-cyan:#23e3df;
+  --logo-blue:#228bfc;
+  --logo-violet:#b436fe;
+  --logo-magenta:#d732a4;
+
+  /* --- light surfaces --------------------------------------- */
+  --bg:#f2f2f2;
+  --bg-alt:#f0f0f0;
+  --surface:#ffffff;
+  --surface-sunken:#f5f6f8;
+  --line:#e5e5e7;
+  --line-soft:#ededed;
+
+  /* --- light text ------------------------------------------- */
+  --text:#3c3f48;
+  --text-2:#75777f;
+  --text-3:#9f9fa6;
+  --placeholder:#8b8b92;
+
+  /* --- dark surfaces ---------------------------------------- */
+  --nav-top:#252d3d;
+  --nav-bot:#3a4869;
+  --deep-top:#0f1319;
+  --deep-bot:#3f4b6c;
+  --card-dark-top:#4b505d;
+  --card-dark-bot:#333846;
+  --chip-dark:#3c404b;
+  --line-dark:rgba(255,255,255,.10);
+  --line-dark-soft:rgba(255,255,255,.06);
+
+  /* --- footer ----------------------------------------------- */
+  --footer:#101116;
+  --footer-bar:#161720;
+  --footer-chip:#2a2a2f;
+  --footer-link:#83848a;
+
+  /* --- inverse text ----------------------------------------- */
+  --on-dark:#ffffff;
+  --on-dark-2:#c9cbd3;
+  --on-dark-3:#8f9299;
+
+  /* --- radii ------------------------------------------------ */
+  --r-xs:6px;
+  --r-sm:8px;
+  --r-md:10px;
+  --r-lg:12px;
+  --r-xl:16px;
+  --r-2xl:20px;
+  --r-pill:999px;
+
+  /* --- elevation -------------------------------------------- */
+  --sh-1:0 1px 2px rgba(16,18,22,.05);
+  --sh-2:0 2px 10px rgba(16,18,22,.07);
+  --sh-3:0 8px 26px rgba(16,18,22,.09);
+  --sh-4:0 18px 44px rgba(16,18,22,.12);
+  --sh-nav:0 10px 30px rgba(18,22,38,.22);
+
+  /* --- layout ----------------------------------------------- */
+  --container:1180px;
+  --container-wide:1224px;
+  --gutter:24px;
+
+  /* --- motion ----------------------------------------------- */
+  --ease:cubic-bezier(.2,.7,.3,1);
+  --dur:160ms;
+
+  /* --- type stacks ------------------------------------------------
+     Matter names things (headings, titles, the wordmark).
+     IBM Plex Sans is everything you read or click.                  */
+  --font-heading:"Matter","IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-body:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,textarea{font:inherit;color:inherit}
+
+/* --- type scale ---------------------------------------------
+   display  52 / 800   hero h1
+   h2       34 / 700   section head (dark band)
+   h3       27 / 700   section head (light)
+   h4       24 / 700   card head (dark)
+   h5       20 / 700   footer column head
+   lead     34 / 500   hero subhead
+   body     15 / 400
+   sm       14 / 400
+   xs       13 / 500
+   micro    11.5 / 400
+------------------------------------------------------------- */
+.u-display{font-family:var(--font-heading);font-size:52px;line-height:1.14;font-weight:800;letter-spacing:-.02em;margin:0}
+.u-h1{font-family:var(--font-heading);font-size:44px;line-height:1.15;font-weight:800;letter-spacing:-.018em;margin:0}
+.u-h1 em,.u-display em{font-style:normal;color:var(--brand-hi)}
+.u-h2{font-family:var(--font-heading);font-size:34px;line-height:1.2;font-weight:700;letter-spacing:-.015em;margin:0}
+.u-h3{font-family:var(--font-heading);font-size:27px;line-height:1.25;font-weight:700;letter-spacing:-.012em;margin:0}
+.u-h4{font-family:var(--font-heading);font-size:24px;line-height:1.25;font-weight:700;letter-spacing:-.01em;margin:0}
+.u-h5{font-family:var(--font-heading);font-size:20px;line-height:1.3;font-weight:700;margin:0}
+.u-lead{font-family:var(--font-heading);font-size:34px;line-height:1.25;font-weight:500;color:var(--text-2);margin:0}
+.u-muted{color:var(--text-2)}
+
+.container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter)}
+.container--wide{max-width:var(--container-wide)}
+
+/* ============================================================
+   COMPONENT — Button
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  height:56px;padding:0 34px;
+  border-radius:var(--r-pill);
+  font-size:17px;font-weight:700;letter-spacing:.01em;
+  white-space:nowrap;
+  transition:transform var(--dur) var(--ease), filter var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--brand);color:#fff;box-shadow:0 2px 10px rgba(117,79,227,.35)}
+.btn--blue{background:var(--blue);color:#fff;box-shadow:0 2px 10px rgba(99,153,242,.30)}
+.btn--ghost-dark{background:var(--line-dark);color:var(--on-dark)}
+.btn__arrow{width:15px;height:15px;flex:none}
+
+/* ============================================================
+   COMPONENT — Navbar (floating dark pill)
+   The bar must never wrap. Every child is `flex:0 0 auto` + `nowrap`, so the
+   row can only ever get tighter, never taller. Padding, gaps, type and the
+   logo all scale fluidly with clamp(), and when the links still cannot fit
+   the whole menu is dropped. The threshold is a CONTAINER query, not a
+   viewport one, so the bar behaves identically at 1224px on the page and at
+   806px inside a docs canvas.
+   ============================================================ */
+.nav-shell{container-type:inline-size;width:100%}
+.nav-wrap{padding:20px var(--gutter) 0}
+.nav{
+  display:flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;
+  max-width:var(--container-wide);margin-inline:auto;
+  height:60px;
+  padding-inline:clamp(16px,2.2cqi,26px) clamp(14px,1.9cqi,22px);
+  gap:clamp(10px,1.9cqi,24px);
+  background:linear-gradient(180deg,var(--nav-top) 0%,var(--nav-bot) 100%);
+  border-radius:var(--r-pill);
+  box-shadow:var(--sh-nav);
+}
+.nav > *{flex:0 0 auto}
+.nav__logo{display:flex;align-items:center;margin-right:auto}
+.nav__logo .logo__img{height:clamp(21px,2.3cqi,28px)}
+.nav__menu{
+  display:flex;align-items:center;flex-wrap:nowrap;
+  gap:clamp(12px,2.1cqi,26px);margin-inline:auto;
+}
+.nav__menu > *{flex:0 0 auto}
+.nav__link{
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+  font-size:clamp(14px,1.3cqi,16px);font-weight:500;color:var(--on-dark);
+  opacity:.94;transition:opacity var(--dur) var(--ease);
+}
+.nav__link:hover{opacity:1}
+.nav__chev{width:11px;height:11px;flex:none;opacity:.8}
+/* The navbar pill is chrome, not a call to action: it is sized by the bar it
+   sits in, so it overrides the Button rather than selecting a Button size. */
+.nav__cta{
+  margin-left:auto;
+  height:32px;padding:0 16px;font-size:13px;
+}
+.nav__cta .btn__arrow{width:12px;height:12px}
+
+/* Progressive tightening. Each step keeps the row on ONE line by removing
+   width, never by wrapping. */
+@container (max-width: 900px){          /* links no longer fit — drop them  */
+  .nav__menu{display:none}
+}
+/* set by the ResizeObserver backstop when the bar would overflow */
+.nav__menu[data-nav-fit-hide]{display:none}
+@container (max-width: 520px){          /* logo + CTA only, tightened       */
+  .nav{height:54px;gap:10px}
+  .nav__logo .logo__img{height:19px}
+  .nav__cta{height:28px;padding:0 12px;font-size:12px}
+}
+@container (max-width: 380px){          /* smallest phones                  */
+  .nav{height:50px;padding-inline:12px 10px}
+  .nav__logo .logo__img{height:16px}
+  .nav__cta{padding:0 10px;font-size:11.5px}
+}
+
+/* --- brand lockup ------------------------------------------- */
+.logo{display:inline-flex;align-items:center;flex:none}
+.logo__img{display:block;height:28px;width:auto;-webkit-user-drag:none;user-select:none}
+.logo--sm .logo__img{height:20px}
+
+/* ============================================================
+   COMPONENT — Quick-link card (icon + copy + arrow)
+   ============================================================ */
+.quicklinks{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;
+  max-width:1076px;margin:30px auto 0;
+}
+.qcard{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border-radius:var(--r-md);
+  padding:12px 14px;box-shadow:var(--sh-2);
+  transition:box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.qcard:hover{box-shadow:var(--sh-3);transform:translateY(-1px)}
+.qcard__icon{
+  width:34px;height:34px;flex:none;border-radius:var(--r-sm);
+  display:grid;place-items:center;color:#fff;
+}
+.qcard__icon svg{width:18px;height:18px}
+.qcard__body{min-width:0;flex:1}
+.qcard__title{font-family:var(--font-heading);display:block;font-size:13px;font-weight:700;color:#414147;line-height:1.25}
+.qcard__sub{display:block;font-size:11.5px;color:#6c6c79;line-height:1.3;margin-top:2px}
+.qcard__go{
+  width:20px;height:20px;flex:none;color:#3c3f48;opacity:.85;
+  transition:transform var(--dur) var(--ease);
+}
+.qcard:hover .qcard__go{transform:translateX(2px)}
+
+/* icon tints */
+.tint-violet{background:linear-gradient(135deg,#a78bfa,#8b5cf6)}
+.tint-blue{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+.tint-purple{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+.tint-green{background:linear-gradient(135deg,#4ade80,#16a34a)}
+
+/* ============================================================
+   SECTION — Hero
+   ============================================================ */
+.hero{padding:40px 0 0;text-align:center}
+.hero__title{margin:0}
+.hero__title em{font-style:normal;color:var(--brand-hi)}
+.hero__sub{margin:12px 0 0}
+
+/* ============================================================
+   COMPONENT — Prompt composer
+   ============================================================ */
+.composer{
+  max-width:843px;margin:56px auto 0;
+  background:var(--surface);
+  border:1px solid var(--line-soft);
+  border-radius:18px;
+  padding:8px;
+  box-shadow:var(--sh-4);
+}
+.composer__inner{
+  background:var(--surface-sunken);
+  border-radius:var(--r-lg);
+  padding:18px 16px 12px;
+  min-height:170px;
+  display:flex;flex-direction:column;
+}
+.composer__field{
+  border:0;background:transparent;resize:none;outline:none;
+  width:100%;flex:1;min-height:74px;
+  font-size:16px;line-height:1.5;color:var(--text);
+  text-align:left;
+}
+.composer__field::placeholder{color:var(--placeholder)}
+.composer__bar{display:flex;align-items:center;gap:10px}
+.composer__bar .spacer{margin-left:auto}
+
+/* --- select pill --------------------------------------------- */
+.pill{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:30px;padding:0 12px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-pill);
+  font-size:13px;font-weight:600;color:var(--text);
+  transition:border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.pill:hover{border-color:#d7d7db;box-shadow:var(--sh-1)}
+.pill--wide{min-width:148px;justify-content:space-between}
+.pill__chev{width:12px;height:12px;color:var(--text-2)}
+
+/* --- circular icon button ------------------------------------ */
+.iconbtn{
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--surface);border:1px solid var(--line);color:var(--text);
+  transition:background var(--dur) var(--ease);
+}
+.iconbtn svg{width:16px;height:16px}
+.iconbtn:hover{background:#fafafb}
+.iconbtn--send{background:#dcdcdf;border-color:#dcdcdf;color:#fff}
+.iconbtn--send:hover{background:#cfcfd3}
+
+/* --- inline text link with chevron --------------------------- */
+.textlink{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:14px;color:var(--text-3);margin-top:20px;
+}
+.textlink svg{width:11px;height:11px}
+.textlink:hover{color:var(--text-2)}
+
+/* ============================================================
+   COMPONENT — Filter chips
+   ============================================================ */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{
+  height:30px;padding:0 14px;display:inline-flex;align-items:center;
+  border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);
+  font-size:13.5px;font-weight:600;color:var(--text);
+  transition:background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.chip:hover{border-color:#d7d7db}
+.chip[aria-selected="true"]{
+  background:var(--brand-soft);border-color:transparent;color:var(--brand-ink);
+}
+
+/* ============================================================
+   COMPONENT — Content card (copy + thumbnail)
+   ============================================================ */
+.cardgrid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;margin-top:22px;
+}
+.card{
+  display:flex;gap:20px;align-items:flex-start;
+  background:var(--surface);border-radius:var(--r-lg);
+  padding:22px;box-shadow:var(--sh-2);
+  transition:box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.card:hover{box-shadow:var(--sh-3);transform:translateY(-2px)}
+.card__body{flex:1;min-width:0}
+/* the shared card-title step — identical across every card in the system */
+.card__title{font-family:var(--font-heading);font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.25;color:#2f3138;margin:0}
+.card__text{font-size:14.5px;line-height:1.55;color:#53565f;margin:16px 0 0}
+.thumb{position:relative;font-family:var(--font-heading);
+  width:165px;height:120px;flex:none;border-radius:var(--r-sm);
+  display:grid;place-items:center;text-align:center;padding:10px;
+  font-size:15px;font-weight:800;line-height:1.05;letter-spacing:.01em;
+  text-transform:uppercase;color:#fff;overflow:hidden;
+}
+/* Play=True — the thumbnail stands for a video. Drawn as two pseudo-elements so
+   the badge needs no markup and sits above whatever the thumbnail holds, real
+   artwork or placeholder type. The halo is the fill at low alpha, never a shadow
+   token, so it reads as light off the badge rather than depth under it. */
+.thumb--play::before{
+  content:"";position:absolute;top:50%;left:50%;width:44px;height:44px;
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:var(--brand);box-shadow:0 0 0 8px rgba(117,79,227,.30);
+}
+.thumb--play::after{
+  content:"";position:absolute;top:50%;left:50%;width:13px;height:15px;
+  /* -42% not -50%: a triangle's optical centre sits left of its bounding box */
+  transform:translate(-42%,-50%);
+  background:#fff;clip-path:polygon(0 0,100% 50%,0 100%);
+}
+.thumb--gold{background:linear-gradient(160deg,#d9a520,#a97708);color:#3a2a02;text-shadow:0 1px 0 rgba(255,255,255,.25)}
+.thumb--night{background:linear-gradient(160deg,#1d2b45,#0b1220);font-size:11px}
+.thumb--magenta{background:linear-gradient(160deg,#7b2ff7,#c026d3)}
+.thumb--matrix{background:linear-gradient(160deg,#10240f,#041003);color:#8ef07a;font-size:14px}
+
+/* ============================================================
+   SECTION — Dark band
+   ============================================================ */
+.deep{
+  background:linear-gradient(180deg,var(--deep-top) 0%,#1c2230 28%,#2c3448 58%,var(--deep-bot) 100%);
+  padding:64px 0 72px;margin-top:56px;
+}
+.deep__title{text-align:center;color:var(--on-dark)}
+.deep__title span{color:var(--on-dark-3)}
+
+/* ============================================================
+   COMPONENT — Plan card (dark)
+   ============================================================ */
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:56px}
+.plan{
+  background:linear-gradient(180deg,var(--card-dark-top),var(--card-dark-bot));
+  border:1px solid var(--line-dark-soft);
+  border-radius:var(--r-2xl);
+  padding:26px;
+  display:flex;flex-direction:column;
+  box-shadow:0 20px 44px rgba(6,9,16,.35);
+}
+.plan__head{display:flex;align-items:center;gap:18px}
+.plan__avatar{
+  position:relative;overflow:hidden;
+  width:64px;height:64px;flex:none;border-radius:50%;
+  display:grid;place-items:center;font-size:28px;
+  background:linear-gradient(180deg,#dfe7f5,#b9c9e6);
+}
+.plan__avatar img{width:100%;height:100%;object-fit:cover;display:block}
+/* the ring lives on a pseudo-element: an inset box-shadow paints *under*
+   replaced content, so on an <img> avatar it would be invisible. */
+.plan__avatar::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.35);pointer-events:none;
+}
+.plan__name{color:var(--on-dark);margin:0}
+.badge{
+  display:inline-flex;align-items:center;height:34px;padding:0 16px;margin-top:8px;
+  background:rgba(255,255,255,.10);border:1px solid var(--line-dark);
+  border-radius:var(--r-pill);
+  font-size:14px;font-weight:500;color:var(--on-dark-2);
+}
+/* on a dark page the badge is a solid qualifier pill, not a ghost chip */
+.theme-dark .badge{
+  margin-top:0;background:var(--badge-fill);border:0;
+  font-size:13.5px;font-weight:600;color:var(--on-dark);
+}
+.features{list-style:none;margin:34px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.feature{display:flex;align-items:flex-start;gap:16px}
+.feature__check{
+  width:30px;height:30px;flex:none;border-radius:var(--r-sm);
+  background:var(--chip-dark);display:grid;place-items:center;
+}
+.feature__check svg{width:15px;height:15px}
+.feature--blue .feature__check svg{color:var(--blue)}
+.feature--purple .feature__check svg{color:var(--brand)}
+.feature__text{font-size:16px;font-weight:700;line-height:1.4;color:var(--on-dark)}
+.plan__foot{margin-top:38px}
+
+/* ============================================================
+   SECTION — Featured on / press
+   ============================================================ */
+.press{background:var(--bg-alt);padding:56px 0 72px}
+.press__title{font-family:var(--font-heading);text-align:center;font-size:30px}
+.press__logos{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:22px;flex-wrap:wrap;margin-top:44px;
+}
+.wordmark{
+  font-size:19px;font-weight:800;color:#8b8b90;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:7px;opacity:.9;
+  transition:opacity var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.wordmark:hover{opacity:1;color:#6b6b70}
+.wordmark--serif{font-family:Georgia,"Times New Roman",serif;font-weight:700}
+.wordmark--tight{letter-spacing:-.06em;font-size:22px}
+.wordmark__box{background:#8b8b90;color:var(--bg-alt);border-radius:3px;padding:1px 5px;font-size:15px}
+
+/* --- award shield -------------------------------------------- */
+.awards{display:flex;justify-content:center;gap:35px;margin-top:52px;flex-wrap:wrap}
+.award{
+  width:167px;padding:18px 14px 42px;text-align:center;color:#fff;
+  clip-path:polygon(0 0,100% 0,100% 84%,50% 100%,0 84%);
+  box-shadow:0 10px 24px rgba(16,18,22,.16);
+}
+.award--eweek{background:#111318;border-top:6px solid #fff}
+.award--cb{background:linear-gradient(180deg,#4e7f96,#1d3b52)}
+.award--gartner{background:#0d1c47}
+.award--forbes{background:linear-gradient(180deg,#4d7a63,#2f5443)}
+.award__brand{font-family:var(--font-heading);font-size:15px;font-weight:800;letter-spacing:.02em}
+.award--eweek .award__brand{font-family:Georgia,serif;font-style:italic;font-size:20px}
+.award--forbes .award__brand{font-family:Georgia,serif;color:#0d0d0d}
+.award--eweek{color:#111}
+.award--eweek .award__body{color:#111}
+.award--forbes{background:linear-gradient(180deg,#eeeeee 0 22%,#4d7a63 22%,#2f5443 100%)}
+.award__big{font-family:var(--font-heading);font-size:46px;font-weight:800;line-height:1;margin-top:6px}
+.award--eweek .award__big{color:#111}
+.award__mid{font-family:var(--font-heading);font-size:17px;font-weight:700;line-height:1.2;margin-top:4px}
+.award__year{font-size:15px;font-weight:600;opacity:.85;margin-top:2px}
+.award__note{
+  font-size:9.5px;line-height:1.35;margin-top:12px;padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.25);opacity:.85;
+}
+.award--eweek .award__note{border-top-color:rgba(0,0,0,.15);color:#111}
+.award--eweek .award__inner{background:#fff;margin:-18px -14px 0;padding:18px 14px 0}
+
+/* ============================================================
+   SECTION — Footer
+   ============================================================ */
+.footer{background:var(--footer);color:var(--on-dark);padding:56px 0 0}
+.footer__grid{
+  display:grid;
+  grid-template-columns:1.9fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:64px;
+}
+.footer__tagline{font-size:13.5px;font-weight:500;color:#e6e7ea;margin:14px 0 0}
+.socials{display:flex;gap:12px;margin-top:24px}
+.social{
+  width:38px;height:38px;border-radius:var(--r-sm);
+  background:var(--footer-chip);display:grid;place-items:center;color:#fff;
+  transition:background var(--dur) var(--ease);
+}
+.social svg{width:17px;height:17px}
+.social:hover{background:#3a3a42}
+.footer__colhead{font-family:var(--font-heading);color:#fff;margin-bottom:22px}
+.footer__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
+.footer__list a{font-size:14px;font-weight:500;color:var(--footer-link);transition:color var(--dur) var(--ease)}
+.footer__list a:hover{color:#d6d7dc}
+.footer__bar{
+  background:var(--footer-bar);
+  padding:22px 0;
+}
+.footer__bar-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.footer__copy{font-size:14px;color:#8b8b90}
+.footer__legal{display:flex;gap:24px}
+.footer__legal a{font-size:14px;font-weight:500;color:var(--footer-link)}
+.footer__legal a:hover{color:#d6d7dc}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1100px){
+  .quicklinks{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .u-display{font-size:38px}
+  .u-h1{font-size:32px}
+  .u-lead{font-size:24px}
+  .u-h2{font-size:26px}
+  .cardgrid,.plans{grid-template-columns:minmax(0,1fr)}
+  .press__logos{justify-content:center;gap:28px}
+  .footer__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px}
+}
+@media (max-width:640px){
+  .quicklinks{grid-template-columns:minmax(0,1fr)}
+  .card{flex-direction:column}
+  .thumb{width:100%;height:150px}
+  .footer__grid{grid-template-columns:minmax(0,1fr)}
+  .footer__bar-inner{flex-direction:column;align-items:flex-start;gap:12px}
+}
+
+/* ============================================================
+   DARK PAGE MODE — subpages
+   The homepage is a light page with dark *sections*. A subpage inverts
+   that: the whole page is dark, and cards/chips sit on it as raised
+   surfaces. Scope it by putting .theme-dark on <body>; every token below
+   is a page-level surface, distinct from the "deep" and "card-dark"
+   tokens that dress dark sections inside a light page.
+   ============================================================ */
+.theme-dark{
+  --page:#1f232f;            /* primary band            */
+  --page-alt:#1a1e29;        /* alternating band        */
+  --surface-on-dark:#2b2f39; /* cards, chips            */
+  --line-on-dark:rgba(255,255,255,.09);
+  --frame-line:rgba(255,255,255,.12); /* outer boundary — a step firmer than --line-on-dark */
+  --bracket:#86c0fa;         /* frame corners           */
+  --accent-green:#8cf8c6;
+  --accent-green-rgb:140,248,198; /* same colour, for rgba() glows */    /* inline links, live node */
+  --dot:rgba(255,255,255,.055);
+  /* raised-surface ramp — replaces the flat --surface-on-dark on any card
+     large enough to show a gradient (product card, CTA panel) */
+  --card-top:#4b505e;        /* raised gradient, top-left       */
+  --card-bot:#292e3b;        /* raised gradient, bottom-right   */
+  --panel-inset:#1d212c;     /* media well inside a raised card */
+  --badge-fill:#575c6b;      /* qualifier pill                  */
+  --avatar-top:#659bf3;      /* product avatar, top             */
+  --avatar-bot:#4b7edd;      /* product avatar, bottom          */
+  --banner-mid:#2b234a;      /* capability banner, centre       */
+  --banner-end:#1d202f;      /* capability banner, both ends    */
+  --slide-head:#3d414c;      /* carousel slide title bar        */
+  --dot-on:#7d58fb;          /* current pagination dot          */
+  --dot-off:#d8d8d8;         /* idle pagination dot             */
+  --dialog:#151a27;          /* video dialog surface            */
+  --dialog-well:#080b16;     /* the video itself — near black   */
+  --scrim:rgba(8,10,16,.72); /* everything behind the dialog    */
+  --menu:#282e3e;            /* nav dropdown panel surface      */
+  --menu-line:#3f4f72;       /* its 1px outer edge              */
+  --menu-divide:rgba(255,255,255,.06); /* rule between columns  */
+  --menutile-top:#36415c;    /* menu icon tile, top             */
+  --menutile-bot:#313c53;    /* menu icon tile, bottom          */
+  --subfooter:#1d212d;       /* support band core — under --page */
+  --wash:rgba(126,146,190,.17);      /* corner wash, top right   */
+  --wash-soft:rgba(126,146,190,.06); /* corner wash, left edge   */
+  background:var(--page);
+  color:var(--on-dark);
+}
+.theme-dark .u-h1,.theme-dark .u-h2,.theme-dark .u-h3{color:var(--on-dark)}
+.theme-dark .u-muted{color:var(--on-dark-3)}
+
+/* dotted field — decorative, sits behind a band's content */
+.dotgrid{
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.4px);
+  background-size:39px 39px;
+  background-position:6px 6px;
+}
+
+.band{padding:76px 0}
+.band--alt{background:var(--page-alt)}
+
+/* ---------- subpage hero ---------- */
+.pagehero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:64px;align-items:center}
+.pagehero__copy{max-width:58ch}
+.pagehero__text{font-size:16px;line-height:1.6;color:var(--on-dark-2);margin:18px 0 0}
+.pagehero__cta{margin-top:34px}
+
+/* ---------- price line ---------- */
+.priceline{display:block;margin-top:26px;font-size:15px;font-weight:700;color:var(--on-dark)}
+.priceline s{color:var(--on-dark-3);text-decoration-thickness:1.5px;margin-right:2px}
+.priceline a{color:var(--accent-green);font-weight:600}
+.priceline a:hover{text-decoration:underline}
+
+/* ---------- bracket frame ---------- */
+.frame{position:relative;background:transparent;border:1px solid var(--frame-line);padding:38px 34px 44px}
+.frame__title{text-align:center;font-size:27px;font-weight:700;letter-spacing:-.012em;color:var(--on-dark);margin:0 0 30px;font-family:var(--font-heading)}
+/* four L-shaped corners, drawn as borders on empty spans */
+.frame__corner{position:absolute;width:30px;height:30px;border:6px solid var(--bracket)}
+.frame__corner--tl{top:-4px;left:-4px;border-right:0;border-bottom:0}
+.frame__corner--tr{top:-4px;right:-4px;border-left:0;border-bottom:0}
+.frame__corner--bl{bottom:-4px;left:-4px;border-right:0;border-top:0}
+.frame__corner--br{bottom:-4px;right:-4px;border-left:0;border-top:0}
+
+/* ---------- feature quadrant ---------- */
+.quadrant{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.quadrant__cell{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:26px 18px;text-align:center;
+}
+/* hairline cross + centre node */
+.quadrant::before,.quadrant::after{content:"";position:absolute;background:var(--line-on-dark)}
+.quadrant::before{left:0;right:0;top:50%;height:1px}
+.quadrant::after{top:0;bottom:0;left:50%;width:1px}
+.quadrant__node{
+  position:absolute;top:50%;left:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;
+  border-radius:50%;background:var(--accent-green);z-index:1;
+  /* One soft stop, fitted to the reference's measured radial falloff. The dot
+     carries the presence; the halo only softens its rim. */
+  box-shadow:0 0 10px 1px rgba(var(--accent-green-rgb),.28);
+}
+/* ---------- artwork slot ----------------------------------------------
+   Reserves the exact box a graphic will occupy and looks unmistakably
+   unfinished until one arrives, so a placeholder is never mistaken for a
+   finished state. Dropping in an <img> is the whole swap — the dashed
+   dressing removes itself and nothing around it moves. Resize per use
+   with --slot. */
+.artslot{
+  --slot:72px;
+  --slot-h:var(--slot);   /* defaults to square; set it for a landscape well */
+  position:relative;width:var(--slot);height:var(--slot-h);flex:none;
+  display:grid;place-items:center;border-radius:12px;
+  border:1px dashed rgba(255,255,255,.24);
+  background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 6px,transparent 6px 12px),
+    rgba(255,255,255,.03);
+  color:var(--bracket);
+}
+.artslot svg{width:24px;height:24px;opacity:.8}
+.artslot img{width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block}
+/* real artwork present — drop the placeholder dressing */
+.artslot:has(img),.artslot--filled{border:0;background:none}
+/* light-surface variant, for placeholders outside a dark page */
+.artslot--on-light{
+  border-color:rgba(16,18,22,.18);color:var(--brand);
+  background:
+    repeating-linear-gradient(45deg,rgba(16,18,22,.045) 0 6px,transparent 6px 12px),
+    rgba(16,18,22,.02);
+}
+.quadrant__label{font-size:15px;font-weight:600;line-height:1.35;color:var(--on-dark)}
+
+/* ---------- dark-surface variants of existing components ---------- */
+.card--on-dark{
+  position:relative;   /* the stretched .card__hit anchors to the card */
+  background:var(--surface-on-dark);border:1px solid var(--line-on-dark);box-shadow:none;
+}
+.card--on-dark:hover{box-shadow:none;border-color:rgba(255,255,255,.16)}
+.card--on-dark .card__title{color:var(--on-dark)}
+.card--on-dark .card__text{color:var(--on-dark-2)}
+
+.chip--on-dark{
+  gap:7px;background:var(--surface-on-dark);border-color:var(--line-on-dark);color:var(--on-dark-2);
+}
+.chip--on-dark:hover{border-color:rgba(255,255,255,.2);color:var(--on-dark)}
+.chip--on-dark[aria-selected="true"]{
+  background:var(--brand);border-color:transparent;color:#fff;
+}
+.chip__icon{width:14px;height:14px;flex:none}
+
+.section-head{text-align:center;color:var(--on-dark);margin:0 0 26px}
+.section-sub{
+  text-align:center;font-size:15px;line-height:1.55;color:var(--on-dark-2);
+  max-width:76ch;margin:-12px auto 30px;
+}
+
+/* ---------- product avatar ---------- */
+.avatar{
+  width:80px;height:80px;flex:none;border-radius:50%;overflow:hidden;
+  display:grid;place-items:center;color:#fff;
+  background:linear-gradient(160deg,var(--avatar-top),var(--avatar-bot));
+}
+.avatar svg{width:36px;height:36px}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.avatar--lg{width:72px;height:72px}
+/* a third-party mark sits on white, never on the blue ramp */
+.avatar--mark{background:#fff;color:#1b1f2a}
+/* model marks ship as their own circle — drop the white plate and overscale a hair
+   so the file's antialiased rim is clipped instead of ringing the tile in white */
+.avatar--mark:has(img){background:none}
+.avatar--mark img{width:104%;height:104%}
+
+/* ---------- icon tile ----------------------------------------------
+   The only place a solid purple block appears at small size, which is
+   what makes a grid of feature cards scan as one family. */
+.icontile{
+  width:52px;height:52px;flex:none;border-radius:var(--r-lg);
+  display:grid;place-items:center;background:var(--brand);color:#fff;
+}
+.icontile svg{width:24px;height:24px}
+.icontile--blue{background:var(--blue)}
+.icontile--xs{width:26px;height:26px;border-radius:var(--r-xs)}
+.icontile--xs svg{width:14px;height:14px}
+
+/* ---------- model tile ---------- */
+.modelgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.modeltile{
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  padding:22px 14px 20px;border-radius:var(--r-xl);text-align:center;
+  background:linear-gradient(135deg,var(--card-top),var(--card-bot));
+}
+/* the shared label step — same as .productcard__name, .fcard__label, .slide__title */
+.modeltile__name{font-family:var(--font-heading);font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.25;color:var(--on-dark)}
+
+/* The wall reflows on its OWN width, not the viewport's, so a model grid in a
+   narrow column breaks at the same tile size it does full-bleed. Every
+   instance must be wrapped in .modelgrid-shell — with no query container the
+   grid is stuck at six across however little room it is given.
+
+   One number drives both steps: the floor is a 127.48px tile, which with the
+   16px gap is 844.88px of grid at six columns and 414.44px at three. Six goes
+   straight to three and three straight to two — four or five across would
+   leave an orphan row out of six tiles. The comparison is a strict `width <`
+   rather than max-width, so a tile at exactly 127.48px still holds its
+   column. */
+.modelgrid-shell{container-type:inline-size;container-name:models}
+@container models (width < 844.88px){
+  .modelgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@container models (width < 414.44px){
+  .modelgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* ---------- capability banner --------------------------------------
+   The one element on the page with a coloured glow, so it appears once
+   and once only — a second turns the device into decoration. */
+.capbanner{
+  display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 26px;
+  border-radius:var(--r-pill);border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(90deg,var(--banner-end),var(--banner-mid) 50%,var(--banner-end));
+  box-shadow:0 0 30px rgba(117,79,227,.18);
+}
+.capbanner__label{font-size:16px;font-weight:700;color:var(--on-dark)}
+.capbanner__note{font-size:16px;font-weight:400;color:var(--on-dark-2)}
+
+/* ---------- feature card ---------- */
+.fcardgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.fcard{
+  display:flex;flex-direction:column;gap:26px;padding:24px;min-height:176px;
+  border-radius:var(--r-xl);background:linear-gradient(135deg,var(--card-top),var(--card-bot));
+}
+/* the same type step as .productcard__name — family, size, weight and tracking */
+.fcard__label{font-family:var(--font-heading);font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.25;color:var(--on-dark);margin-top:auto}
+/* centred variant — the assurance pair, which leads with a circular avatar */
+.fcard--center{align-items:center;text-align:center;justify-content:center;gap:22px;padding:34px 30px}
+/* the centred variant changes alignment only — the label keeps the 20/1.3 step */
+.fcard--center .fcard__label{margin-top:0}
+
+/* ---------- footnote ---------- */
+.footnote{text-align:center;font-size:14.5px;font-weight:500;color:var(--on-dark)}
+.footnote b{color:var(--accent-green);font-weight:700}
+.footnote a{font-size:12.5px;color:rgba(var(--accent-green-rgb),.62)}
+.footnote a:hover{color:var(--accent-green)}
+
+/* ---------- carousel ---------- */
+.carousel__head{display:flex;align-items:center;justify-content:center;gap:26px}
+/* The track is clipped to this box and sized against it, so the carousel behaves
+   identically on the page and inside a docs canvas — a CONTAINER query, not a
+   viewport one, the same trick the navbar uses. */
+.carousel__viewport{container-type:inline-size;overflow:hidden;margin-top:30px}
+.carrow{
+  width:44px;height:44px;flex:none;border-radius:50%;
+  display:grid;place-items:center;background:#fff;color:#1b1f2a;
+  transition:background var(--dur) var(--ease);
+}
+.carrow svg{width:18px;height:18px}
+.carrow:hover{background:#e9eaee}
+.carrow[disabled]{opacity:.35;pointer-events:none}
+.carousel__track{display:flex;align-items:center;justify-content:center;gap:18px}
+.slide{
+  flex:none;width:min(820px,64cqi);
+  border-radius:var(--r-xl);overflow:hidden;background:var(--slide-head);
+}
+/* same step as .productcard__name — a slide title and a product name are the
+   same kind of object, so they take the same type. One line only: the bar is a
+   fixed 56px and .slide clips whatever overflows it. */
+.slide__title{
+  height:56px;display:grid;place-items:center;padding:0 20px;text-align:center;
+  font-family:var(--font-heading);font-size:20px;font-weight:600;letter-spacing:-.01em;
+  line-height:1.25;color:var(--on-dark);
+}
+.slide__media{background:#fff;margin:0 8px 8px;padding:20px;border-radius:var(--r-lg);aspect-ratio:4/3}
+/* The neighbours are shown, never fully — they signal "more". They keep their
+   full layout width and shrink under transform, which is what throws them past
+   the edge of the viewport and cuts them off. */
+.slide--peek{opacity:.55;transform:scale(.55);transform-origin:center}
+.carousel__nav{display:flex;justify-content:center;gap:24px;margin-top:28px}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:24px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dot-off);opacity:.45}
+.dot.is-on{background:var(--dot-on);opacity:1}
+
+/* ---------- video dialog -----------------------------------------------
+   A native <dialog>, so the focus trap, Esc-to-close and the inert page
+   behind it come from the platform rather than from script. Same surface
+   logic as the CTA Panel: the well goes DARKER than the dialog it sits in.
+   The title takes the shared card-title step — a dialog opened from a card
+   is still naming the same thing. */
+.viddialog{
+  width:min(1040px,calc(100vw - 48px));max-width:none;
+  padding:28px;border:1px solid var(--line-on-dark);border-radius:var(--r-2xl);
+  background:var(--dialog);color:var(--on-dark);
+}
+.viddialog::backdrop{background:var(--scrim)}
+.viddialog__head{display:flex;align-items:center;gap:14px}
+.viddialog__icon{width:26px;height:26px;flex:none;color:var(--brand-hi)}
+.viddialog__title{
+  font-family:var(--font-heading);font-size:20px;font-weight:600;
+  letter-spacing:-.01em;line-height:1.25;color:var(--on-dark);margin:0;
+}
+.viddialog__text{font-size:15px;line-height:1.6;color:var(--on-dark-2);margin:18px 0 0}
+.viddialog__media{
+  margin-top:20px;aspect-ratio:16/9;overflow:hidden;
+  background:var(--dialog-well);border-radius:var(--r-sm);
+}
+.viddialog__media video{width:100%;height:100%;display:block}
+.viddialog__foot{display:flex;justify-content:flex-end;margin-top:24px}
+/* Every Content Card is the control — one transparent button is STRETCHED over
+   the card rather than wrapping it, because a <button> may not contain a heading
+   or a paragraph. The play badge stays the visible affordance; this is only the
+   hit area, and it carries the accessible name. */
+.card__hit{
+  position:absolute;inset:0;z-index:1;
+  border:0;background:none;border-radius:inherit;cursor:pointer;
+}
+.card__hit:focus-visible{outline:2px solid var(--bracket);outline-offset:3px}
+
+/* ---------- icon list ---------- */
+.iconlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+.iconrow{display:flex;align-items:center;gap:16px}
+.iconrow__icon{width:26px;height:26px;flex:none;color:var(--bracket)}
+.iconrow__label{font-size:16px;font-weight:700;line-height:1.3;color:var(--on-dark)}
+
+/* ---------- product card ----------------------------------------------
+   The heaviest card in the system. Never more than two on a page — a third
+   means the content wants a feature-card grid instead, so the pair is the
+   only arrangement the grid below supports. */
+.productpair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.productcard{
+  display:flex;flex-direction:column;padding:26px;
+  border-radius:var(--r-2xl);border:1px solid var(--line-on-dark);
+  background:linear-gradient(135deg,var(--card-top),var(--card-bot));
+}
+.productcard__head{display:flex;align-items:center;gap:20px}
+.productcard__name{font-family:var(--font-heading);font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.25;color:var(--on-dark);margin:0 0 8px}
+.productcard__list{margin-top:30px}
+.productcard__foot{margin-top:30px}
+
+/* ---------- CTA panel --------------------------------------------------
+   The page hero's two-column shape, boxed into a raised panel so it reads
+   as a closing summary rather than a second opening. The media well goes
+   *darker* than the page — that inversion is what sells the depth. */
+.ctapanel{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:center;
+  padding:38px;border-radius:var(--r-2xl);
+  background:linear-gradient(135deg,var(--card-top),var(--card-bot));
+}
+.ctapanel__text{font-size:15px;line-height:1.6;color:var(--on-dark-2);margin:18px 0 0}
+.ctapanel__cta{margin-top:30px}
+.ctapanel__media{background:var(--panel-inset);border-radius:var(--r-xl);padding:22px}
+
+/* ---------- nav menu -------------------------------------------------------
+   The panel that drops out of a navbar link. It is the one surface in the
+   system that is neither a band nor a card: it floats over the page like the
+   navbar does, so it carries the navbar's shadow and a visible 1px edge
+   rather than a hairline. --menu is its own fill, bluer and darker than
+   --surface-on-dark, because it has to read against the navbar gradient above
+   it as well as against the page.
+
+   Opening is pure CSS — :hover for pointers, :focus-within for keyboards. No
+   script, so a menu can never be left stuck open by a missed event. */
+.navmenu{
+  width:300px;padding:16px;
+  border-radius:var(--r-2xl);border:1px solid var(--menu-line);
+  background:var(--menu);box-shadow:var(--sh-nav);
+  /* the navbar forbids wrapping; the panel hanging off it must allow it again,
+     or a two-line description silently runs off the edge */
+  white-space:normal;text-align:left;
+}
+/* A bare .navmenu is a panel and renders in place; it only becomes a dropdown
+   inside .navitem, which is what anchors and hides it. Keeping the two apart
+   means the panel can be specced, reviewed and story-booked on its own. */
+.navitem{position:relative}
+.navitem > .navmenu{
+  position:absolute;top:calc(100% + 16px);left:50%;translate:-50% 0;z-index:40;
+  /* visibility, not display, so the panel can transition and still leave the
+     tab order while closed */
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease),
+             visibility 0s linear var(--dur);
+}
+.navitem:hover > .navmenu,
+.navitem:focus-within > .navmenu,
+.navitem > .navmenu.is-open{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+
+/* Two columns, split by a rule rather than a gap — six items in one column
+   would drop the panel past the fold on a laptop. */
+.navmenu--split{width:640px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.navmenu__list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.navmenu--split .navmenu__list:first-child{padding-inline-end:24px}
+.navmenu--split .navmenu__list + .navmenu__list{
+  border-inline-start:1px solid var(--menu-divide);padding-inline-start:24px;
+}
+
+/* 8px of padding plus a 14px gap is what makes the tiles sit 30px apart while
+   the hover target still reaches the panel's inner edge. Change one and the
+   measured rhythm goes with it. */
+.navmenu__item{
+  display:flex;align-items:center;gap:16px;padding:8px;
+  border-radius:var(--r-lg);transition:background var(--dur) var(--ease);
+}
+.navmenu__item:hover,.navmenu__item.is-hover{background:rgba(255,255,255,.05)}
+.navmenu__item:focus-visible{outline:2px solid var(--bracket);outline-offset:2px}
+.navmenu__name{display:block;font-size:15px;font-weight:600;line-height:1.35;color:var(--on-dark)}
+.navmenu__desc{display:block;font-size:13.5px;line-height:1.2;color:var(--on-dark-3)}
+
+/* The tile is a smaller, cooler relative of the Icon Tile — it never takes
+   --brand, because a panel of six purple squares reads as six calls to action.
+   A product mark goes in the same box as an <img>; the fill stays, so the
+   marks sit on one surface instead of six different logo backgrounds. */
+.menutile{
+  width:40px;height:40px;flex:none;border-radius:var(--r-sm);
+  display:grid;place-items:center;color:var(--on-dark);
+  background:linear-gradient(160deg,var(--menutile-top),var(--menutile-bot));
+}
+.menutile svg{width:20px;height:20px}
+/* A product mark gets 24px where a glyph gets 20 — it is full-colour artwork
+   carrying its own silhouette, so it needs the extra to read at this size. It
+   is still centred, never stretched: 8px of tile shows on every side, and that
+   margin is what keeps six different marks looking like one row. */
+.menutile img{width:24px;height:24px;object-fit:contain;display:block}
+/* the slot's default 24px glyph leaves only 8px of air in a 40px tile */
+.menutile .artslot svg{width:16px;height:16px}
+
+/* ---------- sub-footer -------------------------------------------------
+   The support band above the footer. The CTA panel's two-column shape with
+   everything raised about it stripped away: no panel, no gradient surface,
+   no price line. Depth comes from light bleeding in at the corners over a
+   core already darker than --page, which is the opposite of how the CTA
+   panel builds it.
+
+   The band paints its own field rather than taking .dotgrid, because the
+   wash needs gradient layers both above and below the dots and .dotgrid's
+   background-image would replace the whole stack. The dot values are the
+   same 1.4px / 39px / 6px field — keep the two in step. */
+.subfooter-band{
+  background:
+    radial-gradient(var(--dot) 1.4px, transparent 1.4px) 6px 6px/39px 39px,
+    radial-gradient(120% 130% at 100% 0%, var(--wash),      transparent 62%),
+    radial-gradient(85% 105% at 0% 100%, var(--wash-soft), transparent 55%),
+    radial-gradient(75% 95%  at 0% 0%,   var(--wash-soft), transparent 48%),
+    var(--subfooter);
+}
+.subfooter{display:grid;grid-template-columns:minmax(0,530px) minmax(0,1fr);gap:40px;align-items:center}
+.subfooter__text{font-size:15px;line-height:1.5;color:var(--on-dark-2);margin:18px 0 0}
+/* The one unusual number in the system. The CTA is thrown clear of the
+   paragraph so the eye crosses the illustration on its way down instead of
+   reading heading → text → button as one tight block; that distance is what
+   keeps a support band from looking like another pitch. */
+.subfooter__cta{margin-top:116px}
+.subfooter__media{justify-self:end;width:min(100%,356px)}
+
+@media (max-width:900px){
+  .pagehero{grid-template-columns:minmax(0,1fr);gap:40px}
+  .artslot{--slot:60px}
+  .productpair,.ctapanel{grid-template-columns:minmax(0,1fr);gap:30px}
+  /* Stacked, the long drop to the CTA has nothing left to clear. */
+  .subfooter{grid-template-columns:minmax(0,1fr);gap:34px}
+  .subfooter__cta{margin-top:34px}
+  .subfooter__media{justify-self:start}
+  .fcardgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .fcardgrid{grid-template-columns:minmax(0,1fr)}
+  /* A call to action spans the screen on mobile — a pill floating in a narrow
+     column reads as an afterthought, and the thumb target should be the full
+     measure. The navbar pill is chrome, not a CTA, so it stays inline. */
+  .btn{display:flex;width:100%;justify-content:center}
+  .nav__cta{display:inline-flex;width:auto}
+
+  /* ---- no carousel on mobile ----------------------------------------
+     A peeked track needs width to read; below 640px there is none, so the
+     slides stack and every carousel control goes away. The neighbours stop
+     being decoration and become real content — the script at the foot of
+     the page drops their aria-hidden/inert to match. */
+  .carousel__viewport{overflow:visible}
+  .carousel__track{flex-direction:column;gap:18px;padding-inline:var(--gutter)}
+  .slide{width:100%}
+  .slide--peek{opacity:1;transform:none}
+  .dots,.carousel__nav{display:none}
+}

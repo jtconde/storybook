@@ -1,0 +1,15 @@
+/* Storybook canvas only — never ships with the design system. */
+.sb-canvas{
+  padding:28px;
+  background:var(--page);
+  color:var(--on-dark);
+  font-family:var(--font-body);
+}
+/* a few components are full-bleed by design; give them room to breathe here */
+.sb-canvas--flush{padding:0}
+.sb-row{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.sb-stack{display:flex;flex-direction:column;gap:18px}
+.sb-note{
+  font-size:12.5px;line-height:1.5;color:var(--on-dark-3);
+  margin:0 0 16px;font-family:var(--font-body);
+}

@@ -1,0 +1,17 @@
+/* Matter — licensed Displaay face, no CDN. Served from the repo's /Fonts
+   directory via Storybook staticDirs; local() is tried first so machines that
+   already have the family installed skip the fetch. IBM Plex Sans is loaded
+   from Google Fonts in .storybook/preview-head.html. */
+
+@font-face{font-family:"Matter";font-weight:300;font-style:normal;font-display:swap;src:local("Matter-Light"),url("/Fonts/Matter-Light.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:400;font-style:normal;font-display:swap;src:local("Matter-Regular"),url("/Fonts/Matter-Regular.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:500;font-style:normal;font-display:swap;src:local("Matter-Medium"),url("/Fonts/Matter-Medium.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:600;font-style:normal;font-display:swap;src:local("Matter-SemiBold"),url("/Fonts/Matter-SemiBold.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:700;font-style:normal;font-display:swap;src:local("Matter-Bold"),url("/Fonts/Matter-Bold.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:800;font-style:normal;font-display:swap;src:local("Matter-Heavy"),url("/Fonts/Matter-Heavy.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:300;font-style:italic;font-display:swap;src:local("Matter-LightItalic"),url("/Fonts/Matter-LightItalic.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:400;font-style:italic;font-display:swap;src:local("Matter-RegularItalic"),url("/Fonts/Matter-RegularItalic.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:500;font-style:italic;font-display:swap;src:local("Matter-MediumItalic"),url("/Fonts/Matter-MediumItalic.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:600;font-style:italic;font-display:swap;src:local("Matter-SemiBoldItalic"),url("/Fonts/Matter-SemiBoldItalic.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:700;font-style:italic;font-display:swap;src:local("Matter-BoldItalic"),url("/Fonts/Matter-BoldItalic.ttf") format("truetype")}
+@font-face{font-family:"Matter";font-weight:800;font-style:italic;font-display:swap;src:local("Matter-HeavyItalic"),url("/Fonts/Matter-HeavyItalic.ttf") format("truetype")}
