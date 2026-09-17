@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o storybook-static"
+    "build-storybook": "storybook build -o storybook-static",
+    "build-static-webapp":"expo build:web"
   },
   "devDependencies": {
     "@storybook/addon-docs": "^9.0.0",
